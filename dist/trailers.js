@@ -7,6 +7,11 @@
   function stop(card) {
     const video = card.querySelector('.game-trailer');
     card.classList.remove('trailer-playing');
+    if (video.tagName === 'IFRAME') {
+      video.removeAttribute('src');
+      if (active === card) active = null;
+      return;
+    }
     video.pause();
     if (video.readyState > 0) video.currentTime = 0;
     if (active === card) active = null;
@@ -19,6 +24,10 @@
     const video = card.querySelector('.game-trailer');
     // Fetch only the trailer the visitor chooses to preview.
     if (!video.getAttribute('src')) video.src = video.dataset.src;
+    if (video.tagName === 'IFRAME') {
+      card.classList.add('trailer-playing');
+      return;
+    }
     video.muted = true;
     const play = video.play();
     if (play) play.catch(() => {
